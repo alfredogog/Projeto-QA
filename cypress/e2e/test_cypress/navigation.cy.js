@@ -7,29 +7,33 @@ context('Portal da Transparência - Testes de Usabilidade', () => {
     });
 
     // Teste 1: Verificar o título principal da página
-    it('Deve exibir o título principal corretamente', () => {
-        cy.get('h1').contains('Portal da Transparência').should('be.visible');
+    it('Deve exibir a imagem que está sendo utilizada como título principal', () => {
+        cy.get('.figura-home')
     });
 
-    // Teste 2: Testar a funcionalidade de busca do Quadro Geral
-    it('Deve buscar corretamente por "receitas"', () => {
-        cy.get(':nth-child(5) > .nav-dropdown-toggle').click();
-        cy.get('.open > .nav-dropdown-items > :nth-child(1) > .nav-link > span').click();
-        cy.get(':nth-child(4) > .btn > .ui-button-text').click();
-
-    });
-
-    // Teste 3: Garantir que o menu lateral está funcionando
-    it('Deve navegar para a página de Receitas', () => {
-        cy.get('a').contains('Receitas').click();
+    // Teste 2: Garantir que ao clicar em "receitas", seja direcionado para a página de Receitas
+    it('Deve navegar para a página de Receitas (Quadro Geral é o defaut)', () => {
+        cy.get('.componente-home.componente-cards > [href="#/receitas/receitas-quadro-geral"] > span').click();
         cy.url().should('include', '/receitas');
     });
 
-    // Teste 4: Verificar a exibição de links úteis
+    // Teste 3: Verificar a exibição de links úteis
     it('Deve exibir os links úteis', () => {
-        cy.get('.links-uteis').should('be.visible');
+        cy.get('.componentes-home > :nth-child(9)').should('be.visible');
     });
 
+
+    // Teste 4: Testar a funcionalidade do menu hamburguer
+    it('Deve buscar e listar corretamente por "receitas"', () => {
+        cy.get(':nth-child(5) > .nav-dropdown-toggle').click();
+        cy.get('.open > .nav-dropdown-items > :nth-child(1) > .nav-link > span').click();
+        cy.get('.cdk-overlay-backdrop', { timeout: 10000 }).should('not.exist');
+        cy.get(':nth-child(4) > .btn > .ui-button-text').click({ force: true });
+        cy.get('#mat-tab-label-0-0')
+            .should('be.visible')
+            .and('contain', 'Tabela');
+    });
+    
     // Teste 5: Validar o formulário de inscrição de boletins
     it('Deve permitir a inscrição no boletim com um e-mail válido', () => {
         cy.get('input[type="email"]').type('teste@teste.com');
