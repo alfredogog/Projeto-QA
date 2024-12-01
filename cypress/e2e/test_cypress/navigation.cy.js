@@ -63,14 +63,15 @@ context('Portal da Transparência - Testes de Usabilidade', () => {
         cy.get('.elemento-novidades > :nth-child(2)').should('have.length.greaterThan', 0);
     });
 
-    // Teste 9: Garantir que o botão "Abrir Demanda" funciona
-    it.only('Deve abrir a página de Demanda ao clicar no botão', () => {
-        cy.get(':nth-child(2) > .cartao-componente > span').contains('Abrir uma Demanda').click();
-        cy.url().should('include', '/demandas');
+    // Teste 9: Garantir que o botão "Abrir Demanda" funciona e abre o modal
+    it('Deve abrir o modal ao clicar no botão "Abra uma Demanda"', () => {
+    cy.contains('Abra uma Demanda').should('be.visible');
+    cy.contains('Abra uma Demanda').click();
+    cy.contains('Registrar manifestação').should('be.visible');
     });
 
-    // Teste 10: Testar a exibição da seção COVID-19
-    it('Deve exibir a seção COVID-19 corretamente', () => {
-        cy.get('.covid-section').should('be.visible');
+    // Teste 10: Testar a aba do que se deseja buscar
+    it('Deve exibir uma aba contendo as buscas da página', () => {
+    cy.get('.ui-dropdown-label-container > .ng-tns-c192-2').should('be.visible');
     });
 });
