@@ -52,20 +52,20 @@ context('Portal da Transparência - Testes de Usabilidade', () => {
     });
 
     // Teste 7: Garantir responsividade do menu
-    it.only('Deve funcionar o menu em dispositivos móveis', () => {
+    it('Deve funcionar o menu em dispositivos móveis', () => {
         cy.viewport('iphone-x');
-        cy.get('.menu-toggle').click();
+        cy.get('.d-lg-none').click();
         cy.get('nav').should('be.visible');
     });
 
     // Teste 8: Validar seção de notícias
-    it('Deve exibir notícias recentes', () => {
-        cy.get('.noticias-recentes').find('li').should('have.length.greaterThan', 0);
+    it('Deve exibir últimas notícias', () => {
+        cy.get('.elemento-novidades > :nth-child(2)').should('have.length.greaterThan', 0);
     });
 
     // Teste 9: Garantir que o botão "Abrir Demanda" funciona
-    it('Deve abrir a página de Demanda ao clicar no botão', () => {
-        cy.get('a').contains('Abrir uma Demanda').click();
+    it.only('Deve abrir a página de Demanda ao clicar no botão', () => {
+        cy.get(':nth-child(2) > .cartao-componente > span').contains('Abrir uma Demanda').click();
         cy.url().should('include', '/demandas');
     });
 
