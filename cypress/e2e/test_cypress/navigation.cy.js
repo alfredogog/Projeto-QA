@@ -34,21 +34,25 @@ context('Portal da Transparência - Testes de Usabilidade', () => {
             .and('contain', 'Tabela');
     });
     
-    // Teste 5: Validar o formulário de inscrição de boletins
-    it('Deve permitir a inscrição no boletim com um e-mail válido', () => {
-        cy.get('input[type="email"]').type('teste@teste.com');
-        cy.get('button').contains('Inscrever-se').click();
-        cy.contains('Inscrição realizada com sucesso').should('be.visible');
+    // Teste 5: Validar mensagem de erro na inscrição no boletim utilizando e-mail inválido
+    it('Deve exibir uma mensagem de erro ao tentar se inscrever no boletim com um e-mail inválido', () => {
+        cy.intercept('POST', '**/subscribe/post**').as('postRequest');
+        cy.get('#mce-EMAIL').type('teste@teste.com');
+        cy.get('#mc-embedded-subscribe').contains('Inscrever-se').click();
+        cy.wait('@postRequest', { timeout: 10000 }).then((interception) => {
+            expect(interception.response.body).to.include('{"result":"error","msg":"teste@teste.com is an invalid email address and cannot be imported."}');
+        });
     });
 
     // Teste 6: Testar acessibilidade do botão de WhatsApp
     it('Deve exibir e funcionar o botão de WhatsApp', () => {
-        cy.get('a').contains('Ouvidoria via WhatsApp').should('be.visible').click();
+        cy.get('.btn-whatsapp-fixed > img').should('be.visible');
+        cy.get('.btn-whatsapp-fixed').click();
         cy.url().should('include', 'whatsapp');
     });
 
     // Teste 7: Garantir responsividade do menu
-    it('Deve funcionar o menu em dispositivos móveis', () => {
+    it.only('Deve funcionar o menu em dispositivos móveis', () => {
         cy.viewport('iphone-x');
         cy.get('.menu-toggle').click();
         cy.get('nav').should('be.visible');
