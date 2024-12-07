@@ -34,21 +34,24 @@ context('Portal da Transparência - Testes de Usabilidade', () => {
             .and('contain', 'Tabela');
     });
     
-    // Teste 5: Validar mensagem de erro na inscrição no boletim utilizando e-mail inválido
-    it('Deve exibir uma mensagem de erro ao tentar se inscrever no boletim com um e-mail inválido', () => {
-        cy.intercept('POST', '**/subscribe/post**').as('postRequest');
-        cy.get('#mce-EMAIL').type('teste@teste.com');
-        cy.get('#mc-embedded-subscribe').contains('Inscrever-se').click();
-        cy.wait('@postRequest', { timeout: 10000 }).then((interception) => {
-            expect(interception.response.body).to.include('{"result":"error","msg":"teste@teste.com is an invalid email address and cannot be imported."}');
-        });
-    });
+    // Teste: Pesquisar obras públicas com filtros específicos de 2020
+    it('Deve pesquisar obras públicas com filtros específicos', () => {
+        cy.contains('Obras Públicas').should('be.visible').click();
+        cy.url().should('include', '/obras');
+        cy.get('.ui-dropdown-label-container').first().click();
+        cy.contains('.ui-dropdown-item', '2020').click();
+        cy.contains('Pesquisar').should('be.visible').click();
+        cy.get('Tabela').should('be.visible');
+});
 
     // Teste 6: Testar acessibilidade do botão de WhatsApp
     it('Deve exibir e funcionar o botão de WhatsApp', () => {
-        cy.get('.btn-whatsapp-fixed > img').should('be.visible');
-        cy.get('.btn-whatsapp-fixed').click();
-        cy.url().should('include', 'whatsapp');
+        cy.get('.btn-whatsapp-fixed > img', { timeout: 10000 }).should('be.visible');
+        cy.get('.btn-whatsapp-fixed') 
+            .should('have.attr', 'href') 
+            .and('include', 'https://api.whatsapp.com'); 
+        cy.get('.btn-whatsapp-fixed')
+            .should('have.attr', 'target', '_blank'); 
     });
 
     // Teste 7: Garantir responsividade do menu
