@@ -34,7 +34,7 @@ context('Portal da Transparência - Testes de Usabilidade', () => {
             .and('contain', 'Tabela');
     });
     
-    // Teste: Pesquisar obras públicas com filtros específicos de 2020
+    // Teste 5: Pesquisar obras públicas com filtros específicos de 2020
     it('Deve pesquisar obras públicas com filtros específicos', () => {
         cy.contains('Obras Públicas').should('be.visible').click();
         cy.url().should('include', '/obras');
